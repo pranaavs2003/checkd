@@ -21,7 +21,7 @@ export default async function RootLayout({
           {
             (session)
             ?
-            <div className="flex" >
+            <div className="flex bg-[#ECE7F6]" >
               <Sidebar />
               {children}
             </div>

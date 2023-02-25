@@ -8,3 +8,31 @@
         @apply text-sm font-medium text-white bg-[#dfd2ff] pt-2 pb-2 w-11/12 flex justify-center rounded-md cursor-pointer hover:bg-[#a193c5] transition-[0.8s]
     }
 }
+
+.mild__box__shadow{
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.milder__box__shadow{
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #ECE7F6;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #C7B6F2;
+    border-radius: 5px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #b9a1f3;
+  }
