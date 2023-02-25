@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer components{
+    .sidebar__item{
+        @apply text-sm font-medium text-white bg-[#dfd2ff] pt-2 pb-2 w-11/12 flex justify-center rounded-md cursor-pointer hover:bg-[#a193c5] transition-[0.8s]
+    }
+}
