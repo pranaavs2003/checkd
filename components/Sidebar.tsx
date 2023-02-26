@@ -1,23 +1,25 @@
 'use client'
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import LogoutIcon from '@mui/icons-material/Logout';
 export default function Sidebar() {
     const session = useSession();
-    console.log(session);
+    const router = useRouter();
+
   return (
     <div className="w-1/5 md:w-1/6 h-screen flex flex-col items-center justify-between bg-[#C7B6F2] fixed top-0 " >
         {/* Top Container */}
         <div className="w-full pt-8">
-            <div className="font-bold text-white text-2xl md:text-4xl w-full flex justify-center pb-3 cursor-pointer hover:text-[#a287e7] transition-[0.5s] " >
+            <div className="font-bold text-white text-2xl md:text-4xl w-full flex justify-center pb-3 cursor-pointer hover:text-[#a287e7] transition-[0.5s] " onClick={() => router.replace('/')} >
                 <span className="" >check</span>
                 <span className="text-white" >:D</span>
             </div>
             <div className="flex flex-col mt-5 items-center space-y-2" >
-                <div className="sidebar__item" >Dashboard</div>
-                <div className="sidebar__item" >Transactions</div>
-                <div className="sidebar__item" >Your cheques</div>
-                <div className="sidebar__item" >Account</div>
+                <div className="sidebar__item" onClick={() => router.replace('/')}>Dashboard</div>
+                <div className="sidebar__item" onClick={() => router.replace('/transactions')} >Transactions</div>
+                <div className="sidebar__item" onClick={() => router.replace('/cheques')} >Your cheques</div>
+                <div className="sidebar__item" onClick={() => router.replace('/account')} >Account</div>
             </div>
         </div>
 

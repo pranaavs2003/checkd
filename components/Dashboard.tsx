@@ -11,15 +11,25 @@ export default function Dashboard() {
         </div>  
 
         {/* Bottom Container */}
-        <div className="mt-8" >
+        <div className="mt-8 flex-none lg:flex" >
+
+          {/* Right Container */}
+          <div className="lg:w-1/2 w-full" >
             {/* Quick Actions */}
             <div className="flex space-x-6" >
                 <BalanceWidget />
                 <UploadWidget />
             </div>
-            
+            {/* Transactions */}
             <RecentTransactions />
+          </div>
+
+          {/* Left Container */}
+          <div className="lg:w-1/2 w-full" >
+            {/* Cheques */}
             <RecentCheques />
+          </div>
+
         </div>
 
     </div>
