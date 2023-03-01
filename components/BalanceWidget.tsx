@@ -4,7 +4,7 @@ import { collection, getDocs, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react';
-
+import { useRouter } from 'next/navigation';
 type Transaction = {
   amount: number;
   bankName: string;
@@ -24,6 +24,7 @@ export default function BalanceWidget() {
   const [transactions, setTransactions] = useState<Transactions>([]);
   const [balance, setBalance] = useState(0.0);
   const session = useSession();
+  const router = useRouter();
   const transactionsCollectionRef = collection(db, "users", session?.data?.user?.email!, "accounts");
 
   useEffect(() => {
@@ -46,7 +47,9 @@ export default function BalanceWidget() {
   };
 
   return (
-    <div className="h-32 w-40 p-3 flex flex-col justify-between bg-white rounded-md milder__box__shadow mb-6 cursor-pointer hover:scale-[0.98] transition-[0.5s]" >
+    <div
+      onClick={() => router.replace('/account')} 
+      className="h-32 w-40 p-3 flex flex-col justify-between bg-white rounded-md milder__box__shadow mb-6 cursor-pointer hover:scale-[0.98] transition-[0.5s]" >
         {/* Top Container */}
         <div className='flex items-center justify-between' >
             <span className='text-xl font-semibold text-[#727272]' >Balance</span>

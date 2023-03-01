@@ -5,6 +5,7 @@ import { db } from "../firebase";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { collection, getDocs, Timestamp } from "firebase/firestore";
+import { MoonLoader } from "react-spinners";
 
 type Transaction = {
   amount: number;
@@ -23,6 +24,7 @@ type Transactions = Transaction[];
 
 export default function RecentTransactions() {
   const [transactions, setTransactions] = useState<Transactions>([]);
+  const [isLoading, setLoading] = useState<boolean>(false);
   const session = useSession();
 
   const transactionsCollectionRef = collection(db, "users", session?.data?.user?.email!, "accounts")
@@ -37,7 +39,9 @@ export default function RecentTransactions() {
 
   const getTransactions = async () => {
     try{
+      setLoading(true);
       const data = await getDocs(transactionsCollectionRef);
+      setLoading(false);
       const filteredData = data?.docs[0]?.data()?.transactions;
       setTransactions(filteredData);
     }
@@ -52,7 +56,7 @@ export default function RecentTransactions() {
         {/* Transactions Table */}
         <div className='mt-3 flex flex-col space-y-3' >
             {
-              transactions.map((item) => <TransactionItem data={item} key={item?.transactionID} /> )
+              transactions.map((item) => <TransactionItem data={item} key={item?.transactionID} />)
             }
         </div>
         <MoreButton route={'/transactions'} />
@@ -60,3 +64,12 @@ export default function RecentTransactions() {
     </div>
   )
 }
+
+// Loading Code removed
+// {
+//   (isLoading)
+//   ?
+//   <MoonLoader color="#A287E7" size="20px" className="w-full flex justify-center" />
+//   :
+//    )
+// }
