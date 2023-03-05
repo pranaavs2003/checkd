@@ -3,6 +3,8 @@ import CenterFocusWeakIcon from '@mui/icons-material/CenterFocusWeak';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 //import { Image, Transformation, CloudinaryContext } from 'cloudinary-react';
 
 export default function UploadWidget() {
@@ -10,9 +12,11 @@ export default function UploadWidget() {
   const [fileName, setFileName] = useState<string>("Upload file here");
   const [selectedImage, setSelectedImage] = useState('');
   const session = useSession();
+  const router = useRouter();
 
   const getFiles = async (e:React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
+      const notification = toast.loading('Processing Cheque');
       setFiles(e.target.files?.[0]);
       setFileName(e.target.files?.[0]?.name.slice(0, 15));
       const formData = new FormData();
@@ -21,30 +25,39 @@ export default function UploadWidget() {
       formData.append('cloud_name', 'dbzzj25vc');
       formData.append("api_key", '914423246894855');
 
+      try{
+        const response = await fetch(
+          'https://api.cloudinary.com/v1_1/dbzzj25vc/image/upload',
+          {
+            method: 'POST',
+            body: formData,
+          }
+        );
+    
+        const file = await response.json();
+        setSelectedImage(file.secure_url);
 
-      const response = await fetch(
-        'https://api.cloudinary.com/v1_1/dbzzj25vc/image/upload',
-        {
-          method: 'POST',
-          body: formData,
+        const data = {
+          "accountNumber": "654321987546",
+          "email": session?.data?.user?.email!,
+          "balance": 1000000,
+          "chequeImage": file.secure_url,
+          "signatureImage": file.secure_url
         }
-      );
-  
-      const file = await response.json();
-      setSelectedImage(file.secure_url);
 
-      const data = {
-        "accountNumber": "654321987546",
-        "email": session?.data?.user?.email!,
-        "balance": 1000000,
-        "chequeImage": file.secure_url,
-        "signatureImage": file.secure_url
+        const response1 = await axios.post('http://127.0.0.1:8000/transaction/', data);  
+
+        console.log(response1?.data);
+        console.log('API call made successfully.');
+        toast.success('Cheque processed successfully!', {
+          id: notification
+        });
+        router.replace('/success');
       }
 
-      const response1 = await axios.post('http://127.0.0.1:8000/transaction/', data);
-
-      console.log(response1?.data);
-      console.log('API call made successfully.');
+      catch(err){
+        toast.error('Error processing your cheque');
+      }
 
     }
   };

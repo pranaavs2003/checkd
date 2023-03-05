@@ -62,7 +62,7 @@ export default function RecentTransactions() {
         //console.log(transactionsCollectionRef);
         const data1 = await getDocs(transactionsCollectionRef);
         const filteredData = data1?.docs?.map( (item) => item.data());
-        setTransactions(filteredData);
+        setTransactions(filteredData?.slice(0,5)!);
         setLoading(false);
       }
     }
@@ -85,12 +85,3 @@ export default function RecentTransactions() {
     </div>
   )
 }
-
-// Loading Code removed
-// {
-//   (isLoading)
-//   ?
-//   <MoonLoader color="#A287E7" size="20px" className="w-full flex justify-center" />
-//   :
-//    )
-// }
