@@ -26,7 +26,7 @@ export default function TransactionItem({data} : Props) {
     <div className="bg-white p-3 rounded-md text-xs flex items-center justify-between max-w-[500px] cursor-pointer mild__box__shadow hover:scale-[0.98] transition-[0.5s]">
       <span className="p-1 bg-[#C7B6F2] rounded-full">
         {
-          data?.isCredited
+          !data?.isCredited
           ?
           <CallMadeIcon className="text-lg text-white " />
           :

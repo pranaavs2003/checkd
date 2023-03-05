@@ -5,6 +5,7 @@ import { db } from '../firebase';
 import { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { ConditionalAction } from '@cloudinary/url-gen/actions/conditional';
 type Transaction = {
   amount: number;
   bankName: string;
@@ -23,13 +24,24 @@ type Transactions = Transaction[];
 export default function BalanceWidget() {
   const [transactions, setTransactions] = useState<Transactions>([]);
   const [balance, setBalance] = useState(0.0);
+  const [accountNumber, setAccountNumber] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const session = useSession();
   const router = useRouter();
-  const transactionsCollectionRef = collection(db, "users", session?.data?.user?.email!, "accounts");
+  const accountNumberRef = collection(db, "users", session?.data?.user?.email!, "accounts");
 
   useEffect(() => {
-    getTransaction();
+    getTransactions();
   }, [transactions]);
+
+  useEffect(() => {
+    getTransactionData();
+  }, [accountNumber]);
+
+  // useEffect(() => {
+  //   getBalance(transactions);
+  //   console.log(transactions);
+  // }, [transactions]);
 
   const getBalance = (filteredData: Transactions):number => {
     let bal = 0;
@@ -40,10 +52,32 @@ export default function BalanceWidget() {
     return bal;
   };
 
-  const getTransaction = async () => {
-    const data = await getDocs(transactionsCollectionRef);
-    const filteredData = data?.docs[0].data().transactions;
-    setBalance(getBalance(filteredData));
+  const getTransactions = async () => {
+    try{
+      setLoading(true);
+      const data = await getDocs(accountNumberRef);
+      if(data?.docs[0]?.data()?.accountNumber) setAccountNumber(data?.docs[0]?.data()?.accountNumber);
+    }
+    catch(err){
+      console.log(err);
+    }
+  };
+
+  const getTransactionData = async () => {
+    try{
+      if(accountNumber){
+        const acno = accountNumber?.trim();
+        const transactionsCollectionRef = collection(db, "users", session?.data?.user?.email!, "accounts", acno!, "transactions");
+        //console.log(transactionsCollectionRef);
+        const data1 = await getDocs(transactionsCollectionRef);
+        const filteredData = data1?.docs?.map( (item) => item.data());
+        setTransactions(filteredData);
+        setLoading(false);
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
   };
 
   return (
@@ -60,7 +94,7 @@ export default function BalanceWidget() {
 
         {/* Bottom Container */}
         <div className='font-bold text-[#C7B6F2] text-3xl mb-3' >
-            ${balance}
+        ₹{getBalance(transactions)}
         </div>
     </div>
   )

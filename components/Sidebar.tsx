@@ -8,7 +8,7 @@ export default function Sidebar() {
     const router = useRouter();
 
   return (
-    <div className="w-1/5 md:w-1/6 h-screen flex flex-col items-center justify-between bg-[#C7B6F2] fixed top-0 " >
+    <div className="w-1/5 hidden sm:flex md:w-1/6 h-screen flex-col items-center justify-between bg-[#C7B6F2] fixed top-0 " >
         {/* Top Container */}
         <div className="w-full pt-8">
             <div className="font-bold text-white text-2xl md:text-4xl w-full flex justify-center pb-3 cursor-pointer hover:text-[#a287e7] transition-[0.5s] " onClick={() => router.replace('/')} >

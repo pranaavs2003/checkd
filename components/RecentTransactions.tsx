@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { collection, getDocs, Timestamp } from "firebase/firestore";
 import { MoonLoader } from "react-spinners";
+import { async } from "@firebase/util";
 
 type Transaction = {
   amount: number;
@@ -25,9 +26,10 @@ type Transactions = Transaction[];
 export default function RecentTransactions() {
   const [transactions, setTransactions] = useState<Transactions>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [accountNumber, setAccountNumber] = useState<string | null>(null);
   const session = useSession();
 
-  const transactionsCollectionRef = collection(db, "users", session?.data?.user?.email!, "accounts")
+  const accountNumberRef = collection(db, "users", session?.data?.user?.email!, "accounts");
 
   useEffect(() => {
     getTransactions();
@@ -37,13 +39,32 @@ export default function RecentTransactions() {
   //   console.log(transactions);
   // }, [transactions]);
 
+  useEffect(() => {
+    getTransactionData();
+  }, [accountNumber]);
+
   const getTransactions = async () => {
     try{
       setLoading(true);
-      const data = await getDocs(transactionsCollectionRef);
-      setLoading(false);
-      const filteredData = data?.docs[0]?.data()?.transactions;
-      setTransactions(filteredData);
+      const data = await getDocs(accountNumberRef);
+      if(data?.docs[0]?.data()?.accountNumber) setAccountNumber(data?.docs[0]?.data()?.accountNumber);
+    }
+    catch(err){
+      console.log(err);
+    }
+  };
+
+  const getTransactionData = async () => {
+    try{
+      if(accountNumber){
+        const acno = accountNumber?.trim();
+        const transactionsCollectionRef = collection(db, "users", session?.data?.user?.email!, "accounts", acno!, "transactions");
+        //console.log(transactionsCollectionRef);
+        const data1 = await getDocs(transactionsCollectionRef);
+        const filteredData = data1?.docs?.map( (item) => item.data());
+        setTransactions(filteredData);
+        setLoading(false);
+      }
     }
     catch(err){
       console.log(err);

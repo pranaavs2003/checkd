@@ -21,7 +21,7 @@ export default function CheckWidget({data} : Prop) {
     <div className='h-36 w-44 p-3 mr-3 flex flex-col justify-between bg-white rounded-md milder__box__shadow mb-6 cursor-pointer hover:scale-[0.98] transition-[0.5s]' >
         {/* Top Container */}
         <div className='flex items-center justify-between' >
-            <span className='text-4xl font-bold text-[#A287E7] ' >${data?.amount}</span>
+            <span className='text-3xl font-bold text-[#A287E7] ' >₹{data?.amount}</span>
             <span className='' >
                 {
                     data?.chequeStatus
