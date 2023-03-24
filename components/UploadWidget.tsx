@@ -5,6 +5,8 @@ import { useSession } from 'next-auth/react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { useContext } from "react";
+import { SuccessContext } from './SuccessContextProvider';
 //import { Image, Transformation, CloudinaryContext } from 'cloudinary-react';
 
 export default function UploadWidget() {
@@ -13,6 +15,7 @@ export default function UploadWidget() {
   const [selectedImage, setSelectedImage] = useState('');
   const session = useSession();
   const router = useRouter();
+  const { isPopup, setIsPopup } = useContext(SuccessContext); 
 
   const getFiles = async (e:React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -52,7 +55,9 @@ export default function UploadWidget() {
         toast.success('Cheque processed successfully!', {
           id: notification
         });
+        //const redirect = toast.loading('Redirecting');
         router.replace('/success');
+        setIsPopup(true);
       }
 
       catch(err){
@@ -85,3 +90,4 @@ export default function UploadWidget() {
     </div>
   )
 }
+
