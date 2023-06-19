@@ -7,7 +7,22 @@ import SuccessWidget from "./SuccessWidget";
 import { useContext } from "react";
 import { SuccessContext } from "./SuccessContextProvider";
 
-const data = {
+type TransactionRes = {
+  bankName: "AXIS BANK LTD";
+  chequeNumber: "30906250021101242616031";
+  amount: 329000;
+  payeeAccountNumber: "911010049001545";
+  receiverName: "Vijay Kumar Singh";
+  ifsCode: "UTIB0000426";
+  ocrStatus: true;
+  signatureStatus: true;
+};
+
+type TransactionResProps = {
+  data: TransactionRes;
+};
+
+const data: TransactionRes = {
   bankName: "AXIS BANK LTD",
   chequeNumber: "30906250021101242616031",
   amount: 329000,
@@ -25,7 +40,7 @@ export default function Dashboard() {
 
         <button onClick={() => setIsPopup(!isPopup)} >{ ":)" }</button>
         
-        <SuccessWidget className="absolute" data={data} />
+        <SuccessWidget data={data} />
         <div className="flex-1" >
           {/* Top Container */}
           <div className="" >

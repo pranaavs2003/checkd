@@ -52,8 +52,11 @@ export default function RecentCheques() {
     try{
       const acno = accountNumber?.trim();
       const chequeRef = collection(db, "users", session?.data?.user?.email!, "accounts", acno!, "cheques");
+      // const data1 = await getDocs(chequeRef);
+      // const filteredData = data1?.docs?.map((item) => item?.data());
+      // setCheques(filteredData!);
       const data1 = await getDocs(chequeRef);
-      const filteredData = data1?.docs?.map((item) => item?.data());
+      const filteredData = data1?.docs?.map((item) => item?.data() as Cheque);
       setCheques(filteredData!);
       setLoading(false);
     }

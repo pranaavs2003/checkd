@@ -13,9 +13,11 @@ const data = {
 
 export default function page() {
   return (
-    <div className="flex flex-1 h-screen md:ml-[20vw]">
-        <SuccessWidget data={data} />
-    </div>
+    <>
+    </>
+    // <div className="flex flex-1 h-screen md:ml-[20vw]">
+    //     <SuccessWidget data={data} />
+    // </div>
   );
 }
 

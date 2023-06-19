@@ -48,18 +48,27 @@ export default function Cheques() {
   };
 
   const getChequeData = async () => {
-    try{
+    try {
       const acno = accountNumber?.trim();
-      const chequeRef = collection(db, "users", session?.data?.user?.email!, "accounts", acno!, "cheques");
+      const chequeRef = collection(
+        db,
+        "users",
+        session?.data?.user?.email!,
+        "accounts",
+        acno!,
+        "cheques"
+      );
       const data1 = await getDocs(chequeRef);
-      const filteredData = data1?.docs?.map((item) => item?.data());
-      setCheques(filteredData!);
+      const filteredData = data1?.docs?.map((item) => item.data());
+      setCheques(filteredData as Cheques);
       setLoading(false);
-    }
-    catch(err){
+    } catch (err) {
       console.log(err);
     }
   };
+  
+  
+  
 
   return (
     <div className='mb-5 ' >

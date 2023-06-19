@@ -26,7 +26,7 @@ export default function SuccessWidget({data} : TransactionResProps) {
   const router = useRouter();
   const okPress = () => {
     setIsPopup(false)
-    window.location.reload(false);
+    window.location.reload();
     //router.replace('/');
 }
   //console.log("🐚", isPopup);

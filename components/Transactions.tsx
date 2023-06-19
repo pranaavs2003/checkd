@@ -61,7 +61,9 @@ export default function Transactions() {
         const transactionsCollectionRef = collection(db, "users", session?.data?.user?.email!, "accounts", acno!, "transactions");
         //console.log(transactionsCollectionRef);
         const data1 = await getDocs(transactionsCollectionRef);
-        const filteredData = data1?.docs?.map( (item) => item.data());
+        // const filteredData = data1?.docs?.map( (item) => item.data());
+        // setTransactions(filteredData!);
+        const filteredData = data1?.docs?.map((item) => item.data() as Transaction);
         setTransactions(filteredData!);
         setLoading(false);
       }

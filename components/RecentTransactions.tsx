@@ -55,18 +55,24 @@ export default function RecentTransactions() {
   };
 
   const getTransactionData = async () => {
-    try{
-      if(accountNumber){
+    try {
+      if (accountNumber) {
         const acno = accountNumber?.trim();
-        const transactionsCollectionRef = collection(db, "users", session?.data?.user?.email!, "accounts", acno!, "transactions");
-        //console.log(transactionsCollectionRef);
+        const transactionsCollectionRef = collection(
+          db,
+          "users",
+          session?.data?.user?.email!,
+          "accounts",
+          acno!,
+          "transactions"
+        );
+  
         const data1 = await getDocs(transactionsCollectionRef);
-        const filteredData = data1?.docs?.map( (item) => item.data());
-        setTransactions(filteredData?.slice(0,5)!);
+        const filteredData = data1?.docs?.map((item) => item.data() as Transaction);
+        setTransactions(filteredData?.slice(0, 5)!);
         setLoading(false);
       }
-    }
-    catch(err){
+    } catch (err) {
       console.log(err);
     }
   };
