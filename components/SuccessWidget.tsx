@@ -22,10 +22,11 @@ type TransactionResProps = {
 
 
 export default function SuccessWidget({data} : TransactionResProps) {
-  const { isPopup, setIsPopup } = useContext(SuccessContext);
+  const { isPopup, setIsPopup, isData } = useContext(SuccessContext);
   const router = useRouter();
   const okPress = () => {
     setIsPopup(false)
+    window.location.reload(false);
     //router.replace('/');
 }
   //console.log("🐚", isPopup);
@@ -39,28 +40,28 @@ export default function SuccessWidget({data} : TransactionResProps) {
             <CheckCircleIcon className='text-green-500' />
         </div>
         
-        <div className='text-xs font-medium text-gray-500 mt-2' >{data?.bankName}</div>
+        <div className='text-xs font-medium text-gray-500 mt-2' >{isData?.bankName}</div>
         
         <div className='mt-6 flex justify-between flex-wrap' >
             
             <div className='flex flex-col' >
                 <div className='font-semibold text-sm text-[#c2b3e9]' >Receiver Name</div>
-                <div className='font-bold text-2xl text-gray-600' >{data?.receiverName}</div>
+                <div className='font-bold text-2xl text-gray-600' >{isData?.receiverName}</div>
             </div>
 
             <div className='flex flex-col mb-4' >
                 <div className='font-semibold text-sm text-[#c2b3e9]' >Amount</div>
-                <div className='font-bold text-2xl text-green-500' >₹{data?.amount}</div>
+                <div className='font-bold text-2xl text-green-500' >₹{isData?.amount}</div>
             </div>
 
             <div className='flex flex-col mb-4' >
                 <div className='font-semibold text-sm text-[#c2b3e9]' >Cheque Number</div>
-                <div className='font-bold text-base text-gray-600' >{data?.chequeNumber}</div>
+                <div className='font-bold text-base text-gray-600' >{isData?.chequeNumber}</div>
             </div>
 
             <div className='flex flex-col' >
                 <div className='font-semibold text-sm text-[#c2b3e9]' >Payee Account Number</div>
-                <div className='font-bold text-base text-gray-600' >{data?.payeeAccountNumber}</div>
+                <div className='font-bold text-base text-gray-600' >{isData?.payeeAccountNumber}</div>
             </div>
 
             <div className='text-lg font-bold text-white rounded-md cursor-pointer pl-4 pr-4 pt-2 pb-2 bg-[#A287E7] hover:scale-90 bg-[#bea6fc] transition-[0.4s]' onClick={() => okPress()} >ok</div>

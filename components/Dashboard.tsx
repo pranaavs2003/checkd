@@ -23,7 +23,7 @@ export default function Dashboard() {
   return (
     <div className="bg-[#ece7f6] h-fit min-h-[100vh] p-10 relative" >
 
-        <button onClick={() => setIsPopup(!isPopup)} >:)</button>
+        <button onClick={() => setIsPopup(!isPopup)} >{ ":)" }</button>
         
         <SuccessWidget className="absolute" data={data} />
         <div className="flex-1" >

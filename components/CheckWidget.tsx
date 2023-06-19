@@ -16,6 +16,12 @@ type Prop = {
     data: Cheque;
 };
 
+const today = new Date();
+const day = String(today.getDate()).padStart(2, '0');
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const year = today.getFullYear();
+const date = `${day}/${month}/${year}`;
+
 export default function CheckWidget({data} : Prop) {
   return (
     <div className='h-36 w-44 p-3 mr-3 flex flex-col justify-between bg-white rounded-md milder__box__shadow mb-6 cursor-pointer hover:scale-[0.98] transition-[0.5s]' >
@@ -41,7 +47,7 @@ export default function CheckWidget({data} : Prop) {
 
         {/* Bottom Container */}
         <div className='w-full text-xs flex justify-end text-gray-500' >
-            1:10PM - 02/25/2023
+            {date}
         </div>
     </div>
   )

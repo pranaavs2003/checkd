@@ -22,6 +22,7 @@ type Props = {
 };
 
 export default function TransactionItem({data} : Props) {
+  //console.log("🍾" ,data);
   return (
     <div className="bg-white p-3 rounded-md text-xs flex items-center justify-between max-w-[500px] cursor-pointer mild__box__shadow hover:scale-[0.98] transition-[0.5s]">
       <span className="p-1 bg-[#C7B6F2] rounded-full">
@@ -39,7 +40,7 @@ export default function TransactionItem({data} : Props) {
       </span>
       <div className="flex text-gray-500 text-[12px]">
         {/* <span className="">10:39 AM: </span> */}
-        <span className="">2/26/2023</span>
+        <span className="">{data?.bankName}</span>
       </div>
     </div>
   );

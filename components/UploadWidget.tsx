@@ -15,7 +15,7 @@ export default function UploadWidget() {
   const [selectedImage, setSelectedImage] = useState('');
   const session = useSession();
   const router = useRouter();
-  const { isPopup, setIsPopup } = useContext(SuccessContext); 
+  const { isPopup, setIsPopup, setIsData } = useContext(SuccessContext); 
 
   const getFiles = async (e:React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -43,12 +43,12 @@ export default function UploadWidget() {
         const data = {
           "accountNumber": "654321987546",
           "email": session?.data?.user?.email!,
-          "balance": 1000000,
+          "balance": 100000000,
           "chequeImage": file.secure_url,
           "signatureImage": file.secure_url
         }
 
-        const response1 = await axios.post('http://127.0.0.1:8000/transaction/', data);  
+        const response1 = await axios.post('https://checkd-api.onrender.com/transaction/', data);  
 
         console.log(response1?.data);
         console.log('API call made successfully.');
@@ -56,8 +56,18 @@ export default function UploadWidget() {
           id: notification
         });
         //const redirect = toast.loading('Redirecting');
-        router.replace('/success');
+        router.replace('/');
         setIsPopup(true);
+        setIsData({
+          amount: response1?.data?.amount,
+          bankName: response1?.data?.bankName,
+          chequeNumber: response1?.data?.chequeNumber,
+          ifsCode: response1?.data?.ifsCode,
+          ocrStatus: response1?.data?.ocrStatus,
+          payeeAccountNumber: response1?.data?.payeeAccountNumber,
+          receiverName: response1?.data?.receiverName,
+          signatureStatus: response1?.data?.signatureStatus
+        });
       }
 
       catch(err){

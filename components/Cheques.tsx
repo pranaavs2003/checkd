@@ -1,6 +1,5 @@
 'use client'
-import MoreButton from "./MoreButton";
-import CheckWidget from "./CheckWidget";
+import CheckDetailedItem from "./ChequeDetailedItem";
 import { Timestamp } from "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore";
 import { useState, useEffect } from "react";
@@ -18,7 +17,7 @@ type Cheque = {
 
 type Cheques = Cheque[];
 
-export default function RecentCheques() {
+export default function Cheques() {
   const session = useSession();
   const [cheques, setCheques] = useState<Cheques>([]);
   const [accountNumber, setAccountNumber] = useState<string | null>(null);
@@ -63,18 +62,14 @@ export default function RecentCheques() {
   };
 
   return (
-    <div className='' >
-        <div className='text-lg font-semibold text-[#666666]' >Recent Cheques</div>
+    <div className='mb-5 ' >
+        <div className='text-lg font-semibold text-[#666666]' >Recent Transactions</div>
         {/* Transactions Table */}
-        <div className='mt-3 flex flex-wrap' >
-            {
-              cheques?.map((item) => <CheckWidget data={item} key={item?.chequeNumber} />)
+        <div className='mt-3 flex flex-col space-y-3' >
+        {
+              cheques?.map((item) => <CheckDetailedItem data={item} key={item?.chequeNumber} />)
             }
-            {/* {
-              cheques.map((item) => <CheckWidget data={item} key={item?.chequeNumber} />)
-            } */}
         </div>
-        <MoreButton route={'cheques'} />
 
     </div>
   )
