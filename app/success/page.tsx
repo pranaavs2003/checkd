@@ -1,4 +1,6 @@
-import SuccessWidget from "../../components/SuccessWidget";
+'use client'
+import { SuccessContext } from '../../components/SuccessContextProvider';
+import { useState, useContext } from 'react';
 
 const data = {
     bankName: "AXIS BANK LTD",
@@ -12,13 +14,65 @@ const data = {
   };
 
 export default function page() {
+  const { isPopup, setIsPopup, isData } = useContext(SuccessContext); 
+  console.log(isPopup);
+  console.log(setIsPopup);
+  console.log(isData);
+
   return (
-    <>
-    </>
-    // <div className="flex flex-1 h-screen md:ml-[20vw]">
-    //     <SuccessWidget data={data} />
-    // </div>
-  );
+
+        <div className="text-3xl font-semibold p-5 ml-[20vw] min-h-screen h-fit" >
+          <div className="flex-1" >
+            {/* Top Container */}
+            <div className="mt-10" >
+                <span className="font-bold text-6xl text-[#a287e7]" >Success</span>
+            </div>  
+  
+            {/* Bottom Container */}
+            <div className="mt-8 flex flex-col " >
+              
+              <div className=''>
+              Bank Name: 
+              {isData?.bankName}
+              </div>
+
+              <div className=''>
+              Receiver Name: 
+              {isData?.receiverName}
+              </div>
+
+              <div className=''>
+              Account Number: 
+              {isData?.payeeAccountNumber}
+              </div>
+
+              <div className=''>
+              Amount: 
+              {isData?.amount}
+              </div>
+
+              <div className=''>
+              IFSC: 
+              {isData?.ifsCode}
+              </div>
+
+              <div className=''>
+              Cheque number: 
+              {isData?.chequeNumber}
+              </div>
+
+              <div className=''>
+              Signature Status: 
+              {isData?.signatureStatus}
+              </div>
+
+            </div>
+            
+
+          </div>
+          </div>
+      )
+
 }
 
 

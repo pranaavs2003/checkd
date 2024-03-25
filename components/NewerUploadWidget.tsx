@@ -43,7 +43,7 @@ function centerAspectCrop(
   )
 }
 
-export default function UploadWidget() {
+export default function NewerUploadWidget() {
   const [files, setFiles] = useState<File | undefined>(undefined);
   const [fileName, setFileName] = useState<string>("Upload file here");
   const [selectedImage, setSelectedImage] = useState('');
@@ -240,30 +240,31 @@ export default function UploadWidget() {
 
 
   return (
-    <div className="w-[100vw]">
+    <div className="flex flex-row h-[100vh] w-[100vw]">
 
-    <div>
-    <div className="h-32 w-40 p-3 flex flex-col justify-between bg-white rounded-md milder__box__shadow mb-6 cursor-pointer hover:scale-[0.98] transition-[0.5s]" >
-        {/* Top Container */}
-        <div className='flex items-center justify-between' >
-            <span className='text-xl font-semibold text-[#727272]' >Upload</span>
-            <span className='h-10 w-10 flex justify-start items-center pl-2 rounded-full bg-[#C7B6F2]' >
-                <CenterFocusWeakIcon className='text-white' />
-            </span>
+        <div className="h-32 w-40 p-3 flex flex-col justify-between bg-white rounded-md milder__box__shadow mb-6 cursor-pointer hover:scale-[0.98] transition-[0.5s]" >
+            
+            {/* Top Container */}
+            <div className='flex items-center justify-between' >
+                <span className='text-xl font-semibold text-[#727272]' >Upload</span>
+                <span className='h-10 w-10 flex justify-start items-center pl-2 rounded-full bg-[#C7B6F2]' >
+                    <CenterFocusWeakIcon className='text-white' />
+                </span>
+            </div>
+
+            {/* Bottom Container */}
+            <div className=' text-xs font-semibold text-[#C7B6F2] flex justify-center pt-2 pb-2 border-[2px] border-dashed border-[#C7B6F2] rounded-sm cursor-pointer relative ' >
+                <span className='absolute text-sm truncate' >{fileName}</span>
+                <input type="file" className="opacity-0" name="file" id="file" accept="image/*" onChange={onSelectFile} />
+            </div>
+      
         </div>
 
-        {/* Bottom Container */}
-        <div className=' text-xs font-semibold text-[#C7B6F2] flex justify-center pt-2 pb-2 border-[2px] border-dashed border-[#C7B6F2] rounded-sm cursor-pointer relative ' >
-          <span className='absolute text-sm truncate' >{fileName}</span>
-          <input type="file" className="opacity-0" name="file" id="file"  accept="image/*" onChange={onSelectFile} />
-        </div>
-        
-    </div>
-
-    </div>
-
-
-    <div>    {!!imgSrc && (
+        <div className="" >
+        {/* <div className="Crop-Controls">
+        <input type="file" accept="image/*" onChange={onSelectFile} />
+      </div> */}
+      {!!imgSrc && (
         <ReactCrop
           crop={crop}
           onChange={(_, percentCrop) => setCrop(percentCrop)}
@@ -298,10 +299,6 @@ export default function UploadWidget() {
           </div>
           <div>
             <button onClick={onDownloadCropClick}>Download Crop</button>
-            <div style={{ fontSize: 12, color: '#666' }}>
-              If you get a security error when downloading try opening the
-              Preview in a new tab (icon near top right).
-            </div>
             <a
               href="#hidden"
               ref={hiddenAnchorRef}
@@ -316,8 +313,9 @@ export default function UploadWidget() {
             </a>
           </div>
         </>
-      )}</div>
-
+      )}
+        
+        </div>
 
 
     </div>

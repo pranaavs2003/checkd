@@ -4,8 +4,10 @@ import BalanceWidget from "./BalanceWidget";
 import UploadWidget from "./UploadWidget";
 import RecentCheques from "./RecentCheques";
 import SuccessWidget from "./SuccessWidget";
+import NewUploadWidget from "./NewUploadWidget";
 import { useContext } from "react";
 import { SuccessContext } from "./SuccessContextProvider";
+import CropImage from "../app/crop/CropImage";
 
 type TransactionRes = {
   bankName: "AXIS BANK LTD";
@@ -47,15 +49,19 @@ export default function Dashboard() {
               <span className="font-bold text-6xl text-[#a287e7]" >Dashboard</span>
           </div>  
 
+          {/* <CropImage /> */}
+
           {/* Bottom Container */}
-          <div className="mt-8 flex-none lg:flex" >
+          <div className="mt-8 flex flex-col w-full" >
 
             {/* Right Container */}
             <div className="lg:w-1/2 w-full" >
+              {/* <NewerUploadWidget /> */}
               {/* Quick Actions */}
-              <div className="flex space-x-6" >
+              <div className="w-full" >
                   <BalanceWidget />
-                  <UploadWidget />
+                  {/* <UploadWidget /> */}
+                  <NewUploadWidget />
               </div>
               {/* Transactions */}
               <RecentTransactions />

@@ -34,7 +34,10 @@ export default function TransactionItem({data} : Props) {
           <CallReceivedIcon className="text-lg text-white " />
         }
       </span>
-      <span className={`font-semibold text-lg ${data?.isCredited ? "text-green-400" : "text-red-400"}`}>${data?.amount}</span>
+      <span className={`font-semibold text-lg ${data?.isCredited ? "text-green-400" : "text-red-400"}`}>
+      ₹{data?.amount}
+        
+      </span>
       <span className="font-medium text-gray-500 text-sm">
         {formatAccno(data?.payeeAccountNumber)}
       </span>

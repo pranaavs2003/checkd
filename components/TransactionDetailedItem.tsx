@@ -48,7 +48,7 @@ export default function TransactionDetailedItem({data} : Props) {
           <CallReceivedIcon className="text-lg text-white " />
         }
       </span>
-      <span className={`font-semibold text-lg ${data?.isCredited ? "text-green-400" : "text-red-400"}`}>${data?.amount}</span>
+      <span className={`font-semibold text-lg ${data?.isCredited ? "text-green-400" : "text-red-400"}`}>₹{data?.amount}</span>
       <div className="flex text-gray-500 text-[12px]">
         {/* <span className="">10:39 AM: </span> */}
         <span className="text-md font-bold">{data?.bankName}</span>

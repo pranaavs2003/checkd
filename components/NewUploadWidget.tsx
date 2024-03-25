@@ -1,14 +1,14 @@
 'use client'
 import CenterFocusWeakIcon from '@mui/icons-material/CenterFocusWeak';
-import { useRef, useState } from 'react';
+import { useRef, useState, useContext, useEffect, FC } from 'react';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { useContext } from "react";
 import { SuccessContext } from './SuccessContextProvider';
 //import { Image, Transformation, CloudinaryContext } from 'cloudinary-react';
 
+import Cropper from "react-easy-crop";
 import ReactCrop, {
   centerCrop,
   makeAspectCrop,
@@ -43,13 +43,22 @@ function centerAspectCrop(
   )
 }
 
-export default function UploadWidget() {
+
+interface Props {
+  source: string;
+  width: number;
+  height: number;
+}
+
+
+
+export default function NewUploadWidget() {
   const [files, setFiles] = useState<File | undefined>(undefined);
   const [fileName, setFileName] = useState<string>("Upload file here");
   const [selectedImage, setSelectedImage] = useState('');
   const session = useSession();
   const router = useRouter();
-  const { isPopup, setIsPopup, setIsData } = useContext(SuccessContext); 
+  const { isPopup, setIsPopup, setIsData, isData} = useContext(SuccessContext);
 
   const getFiles = async (e:React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -111,10 +120,6 @@ export default function UploadWidget() {
     }
   };
 
-  // useEffect(() => {
-  //   console.log("🌜", files);
-  // }, [files]);
-
 
   //New Code
   //<------------------------------------------------------>
@@ -128,6 +133,91 @@ export default function UploadWidget() {
   const [scale, setScale] = useState(1)
   const [rotate, setRotate] = useState(0)
   const [aspect, setAspect] = useState<number | undefined>(16 / 9)
+
+  const timerId = () => setTimeout(() => {
+    // Code to execute after the delay
+    console.log('Delayed action executed after 3 seconds');
+  }, 3000);
+
+  const handleDownloadAndSend = async () => {
+    if (!completedCrop || !imgRef.current) return;
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    canvas.width = completedCrop.width;
+    canvas.height = completedCrop.height;
+
+    ctx.drawImage(
+      imgRef.current,
+      completedCrop.x+60,
+      completedCrop.y,
+      completedCrop.width,
+      completedCrop.height,
+      0,
+      0,
+      completedCrop.width,
+      completedCrop.height
+    );
+
+    // Convert canvas to blob
+    canvas.toBlob(async (blob) => {
+      if (blob) {
+
+        try {
+          // Send the cropped image to the API
+          const formData = new FormData();
+          const croppedImage = new File([blob], 'cropped_image.png', { type: 'image/png' });
+          formData.append('cropped_image', croppedImage);
+
+          timerId();
+          const croppedResponse = await axios.post('http://127.0.0.1:8000/upload-cropped-image/', formData);
+          console.log('Cropped image sent successfully:', croppedResponse.data);
+
+          toast.success('Images sent successfully');
+        } catch (error) {
+          console.error('Error sending images:', error);
+          // toast.error('Error sending images');
+        }
+
+      }
+    }, 'image/png');
+  };
+
+  const doOcr = async () => {
+    const res = await axios.get('http://127.0.0.1:8000/ocr/');
+    
+    const data = {
+      amount: res?.data?.message?.amount,
+      bankName: res?.data?.message?.bank,
+      chequeNumber: res?.data?.message?.cqno,
+      ifsCode: res?.data?.message?.ifsc,
+      ocrStatus: true,
+      payeeAccountNumber: res?.data?.message?.acno,
+      receiverName: res?.data?.message?.name,
+      signatureStatus: true,
+    };
+    
+    
+    setIsData(data);
+
+    toast.success('Check Read Successfully!');
+
+    timerId();
+
+    const res1 = await axios.get('http://127.0.0.1:8000/check_sign/');
+    console.log("🌐", res1);
+
+    if(res1?.data?.message === "verified"){
+      toast.success('Sign Legit');
+      router.replace('/otp');
+    }
+    else{
+      toast.failure('Sign Fake');
+    }
+    
+  };
 
   function onSelectFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
@@ -235,6 +325,32 @@ export default function UploadWidget() {
     }
   }
 
+  const handleImageUpload = async () => {
+    if (!selectedImage) return;
+
+    const formData = new FormData();
+    formData.append('original_image', selectedImage);
+
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/upload-original-image/', formData);
+      console.log('Image uploaded successfully:', response.data);
+      toast.success('Check Image uploaded Successfully');
+
+      timerId();
+
+      doOcr();
+      // Optionally, handle success message or any other logic
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      // Optionally, handle error message or any other error logic
+    }
+  };
+
+  const handleImageChange = (e: any) => {
+    setSelectedImage(e.target.files[0]);
+    handleImageUpload();
+  };
+
 
   //<------------------------------------------------------>
 
@@ -255,7 +371,19 @@ export default function UploadWidget() {
         {/* Bottom Container */}
         <div className=' text-xs font-semibold text-[#C7B6F2] flex justify-center pt-2 pb-2 border-[2px] border-dashed border-[#C7B6F2] rounded-sm cursor-pointer relative ' >
           <span className='absolute text-sm truncate' >{fileName}</span>
-          <input type="file" className="opacity-0" name="file" id="file"  accept="image/*" onChange={onSelectFile} />
+          <input 
+  type="file" 
+  className="opacity-0" 
+  name="file" 
+  id="file"  
+  accept="image/*" 
+  onChange={(e) => {
+    handleImageChange(e);
+    onSelectFile(e);
+  }} 
+/>
+
+
         </div>
         
     </div>
@@ -297,7 +425,7 @@ export default function UploadWidget() {
             />
           </div>
           <div>
-            <button onClick={onDownloadCropClick}>Download Crop</button>
+            <button onClick={() => { handleDownloadAndSend(); handleImageUpload(); } }>Download Crop</button>
             <div style={{ fontSize: 12, color: '#666' }}>
               If you get a security error when downloading try opening the
               Preview in a new tab (icon near top right).

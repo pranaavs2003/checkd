@@ -20,10 +20,14 @@
     "fs": "^0.0.1-security",
     "next": "latest",
     "next-auth": "^4.19.2",
+    "rc-slider": "^10.5.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-easy-crop": "^5.0.5",
     "react-firebase-hooks": "^5.1.1",
     "react-hot-toast": "^2.4.0",
+    "react-image-crop": "^11.0.5",
     "react-spinners": "^0.13.8"
   },
   "devDependencies": {
